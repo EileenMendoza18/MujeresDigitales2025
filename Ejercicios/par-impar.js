@@ -1,3 +1,5 @@
+//basico
+
 // const numero=10;
 
 // if (isNaN(numero)) {
@@ -10,6 +12,8 @@
 // }
 
 
+
+//avanzado
 const ParImpar=require("readline").createInterface({ // libreria readline para leer datos ingresados 
     input:process.stdin, // entrada de datos
     output:process.stdout // salida de datos
