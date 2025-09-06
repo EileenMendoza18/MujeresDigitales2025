@@ -21,7 +21,6 @@ ParImpar.question("Ingrese el valor del numero: ", (valor)=>{ // pregunta al usu
     if (isNaN(numero)) { // si el valor ingresado no es un numero 
         console.log("El valor ingresado no es un numero");
         ParImpar.close(); // se cierra si se cumple la condicion
-        return; // se sale de la funcion
     }else if(numero%2===0){
         console.log("El numero ingresado es par"); // si el numero es divisible entre 2 es par
     }else{
