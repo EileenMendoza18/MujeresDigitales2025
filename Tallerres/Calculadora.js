@@ -1,4 +1,4 @@
-console.log("\nOpciones: \n1-Sumar \n2-Restar \n3-Multiplicar \n4-Dividir \n5-Salir");
+
 
 const readline = require("readline");
 const opciones = readline.createInterface({
@@ -7,7 +7,7 @@ const opciones = readline.createInterface({
 });
 
 const menu = () => {
-
+    console.log("\nOpciones: \n1-Sumar \n2-Restar \n3-Multiplicar \n4-Dividir \n5-Salir");
     opciones.question("\nIngrese la opcion que desea: ", (num_opc)=>{
         const opcion=Number(num_opc);
 
@@ -62,7 +62,7 @@ const menu = () => {
                 return;
             default:
                 console.log("\nLa opcion ingresada no es valida");
-                break;
+                return menu();
         }
     });
 };
