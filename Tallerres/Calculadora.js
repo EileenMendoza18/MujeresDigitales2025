@@ -1,5 +1,3 @@
-
-
 const readline = require("readline");
 const opciones = readline.createInterface({
     input: process.stdin,
@@ -7,7 +5,7 @@ const opciones = readline.createInterface({
 });
 
 const menu = () => {
-    console.log("\nOpciones: \n1-Sumar \n2-Restar \n3-Multiplicar \n4-Dividir \n5-Salir");
+    console.log("\nOpciones: \n1-Sumar \n2-Restar \n3-Multiplicar \n4-Dividir \n5-Sacar porcentaje \n 6-Sacar raices \n7-Salir");
     opciones.question("\nIngrese la opcion que desea: ", (num_opc)=>{
         const opcion=Number(num_opc);
 
@@ -15,7 +13,9 @@ const menu = () => {
             case 1:
             case 2:
             case 3:
-            case 4: 
+            case 4:
+            case 5:
+            case 6: 
                 opciones.question("\nIngrese el primer numero: ", (valor1) => {
                 const numero1 = Number(valor1);
 
@@ -49,6 +49,7 @@ const menu = () => {
                                     console.log(`El resultado de la división es: ${numero1 / numero2}`);
                                 }
                                 break;
+                            case 5:
                             }
                         }   
 
@@ -56,7 +57,7 @@ const menu = () => {
                 });
             });
             break
-            case 5:
+            case 7:
                 console.log("\nSaliendo de la calculadora ...");
                 opciones.close();
                 return;
