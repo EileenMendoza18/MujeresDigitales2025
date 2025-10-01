@@ -6,7 +6,7 @@ import { IUser,IProducts } from 'src/interfaces';
 export class UsersService {
 
     private users: IUser []=[
-        {id: 1, name: 'Eileen', email: 'eileenjml4816@gmail.com', password: 'eileen123'},
+        {id: 1, name: 'Eileen', email: 'eileenjml4816@gmail.com', password: 'eileen123', age: 18},
         {id: 2,name: 'Jefferson', email: 'pullido@gmail.com',  password: 'asd123' },
     ]
 
