@@ -17,11 +17,11 @@ export class ProductsService {
         return this.products;
     }
 
-    productsOne(busqueda:string): IProducts{
+    productsOne(busqueda:string): IProducts[]{
 
         const valorNormalizado= String(busqueda).toLowerCase();
 
-        const productFind= this.products.find((product) =>
+        const productFind= this.products.filter((product) =>
         
             String(product.id).toLowerCase()===valorNormalizado ||
             String(product.name).toLowerCase()===valorNormalizado ||
@@ -29,7 +29,9 @@ export class ProductsService {
             String(product.category).toLowerCase()===valorNormalizado ||
             String(product.marca).toLowerCase()===valorNormalizado 
         );
-        if (!productFind) throw new NotFoundException(`Producto no encontrado, intente nuevamente`);
+        if (!productFind.length) {
+            throw new NotFoundException(`Producto no encontrado, intente nuevamente`);
+        }
         return productFind;
     }
 

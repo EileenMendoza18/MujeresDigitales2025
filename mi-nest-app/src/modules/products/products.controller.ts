@@ -26,12 +26,12 @@ export class ProductsController {
 
     @Put(':busqueda')
     update(@Param('busqueda') busqueda:string, @Body() body: UpdateProductDTO){
-        return this.ProductsService.update(('busqueda'),body)
+        return this.ProductsService.update(busqueda,body)
     }
     
     @Delete(':busqueda')
     
     remove(@Param('busqueda') busqueda:string){
-        return this.ProductsService.remove(('busqueda'));
+        return this.ProductsService.remove(busqueda);
     }
 }

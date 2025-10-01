@@ -19,7 +19,7 @@ export class CreateProductDTO{
     @IsString({ message: 'La categoría debe ser un texto' })
     @IsNotEmpty({ message: 'La categoría es obligatoria'})
     @Length(3, 30, { message: 'La categoría debe tener entre 3 y 30 caracteres' })
-    @IsIn(['Electrónica', 'Ropa', 'Alimentos', 'Hogar', 'Otros'], { 
+    @IsIn(['Panaderia', 'Pasteleria', 'Alimentos', 'Hogar', 'Otros'], { 
     message: 'La categoría debe ser una de las siguientes: Electrónica, Ropa, Alimentos, Hogar, Otros' })
     category: string;
 
