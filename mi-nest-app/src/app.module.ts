@@ -7,9 +7,10 @@ import { ProductoUsuarioModule } from './modules/producto-usuario/producto-usuar
 import { ProductsModule } from './modules/products/products.module';
 import { ProductsController } from './modules/products/products.controller';
 import { ProductsService } from './modules/products/products.service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({isGlobal:true}),UsersModule, ProductsModule, ProductoUsuarioModule, ProductsModule],
+  imports: [ConfigModule.forRoot({isGlobal:true}),UsersModule, ProductsModule, ProductoUsuarioModule, ProductsModule, AuthModule],
   controllers: [AppController, ProductsController, ProductsController],
   providers: [AppService, ProductsService],
 })
