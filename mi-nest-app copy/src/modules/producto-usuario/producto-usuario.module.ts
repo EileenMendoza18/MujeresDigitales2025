@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ProductoUsuarioController } from './producto-usuario.controller';
 import { ProductoUsuarioService } from './producto-usuario.service';
-import { UsersModule } from '../users/users.module';     // Asegúrate de que exista y exporte UsersService
-import { ProductsModule } from '../products/products.module'; // Asegúrate de que exista y exporte ProductsService
+import { UsersModule } from '../users/users.module';     
+import { ProductsModule } from '../products/products.module'; 
 
 @Module({
   imports: [UsersModule, ProductsModule],
