@@ -161,15 +161,6 @@ export class ProductoUsuarioService {
     remove(busqueda:searchProductsUsersDTO) {
         
 
-        const valorNormalizado= String(busqueda).toLowerCase();
-
-        const product= this.producto_usuario.findIndex((product) =>
-        
-            String(product.id).toLowerCase()===valorNormalizado ||
-            String(product.usuario).toLowerCase()===valorNormalizado ||
-            String(product.producto).toLowerCase()===valorNormalizado         );
-        this.producto_usuario.splice(product,1)
-        return{delete:true}
         
     // constructor (private readonly usersService:UsersService,private readonly productsService:ProductsService){}
 
