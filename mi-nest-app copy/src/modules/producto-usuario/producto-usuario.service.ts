@@ -4,6 +4,7 @@ import { ProductsService } from '../products/products.service';
 import { searchProductsUsersDTO } from 'src/dto/searchProductsUsers.dto';
 import { IProducts, IUser } from 'src/interfaces';
 import { IUProductsUsers } from 'src/interfaces/IUProductsUsers';
+import { ICreateUsersProducts } from 'src/interfaces/ICreateUsersProducts';
 
 @Injectable()
 export class ProductoUsuarioService {
@@ -11,6 +12,8 @@ export class ProductoUsuarioService {
     private users: IUser []=[
             {id: 1, name: 'Laura', email: 'laura@gmail.com', password: 'laura123', age: 18},
             {id: 2, name: 'Jhonatan', email: 'jhonatan@gmail.com',  password: 'jhonatan123' },
+            {id: 3, name: 'Lucia', email: 'lucia@gmail.com', password: 'lucia123', age: 18},
+            {id: 4, name: 'Wendy', email: 'wendy@gmail.com',  password: 'wendy123' }
         ]
 
     private products:IProducts[]=[
@@ -23,25 +26,26 @@ export class ProductoUsuarioService {
     ]
 
     private producto_usuario: IUProductsUsers[]=
-    [   // http://localhost:4000/producto-usuario?usuario=laura@gmail.com&product=Bizcocho de fresa
+    [   //En caso de utilizar el @Query:  http://localhost:4000/producto-usuario?usuario=laura@gmail.com&product=Bizcocho de fresa
         {id:1, usuario: 'Laura', producto: 'Bizcocho de fresa'},
-        // http://localhost:4000/producto-usuario?usuario=jhonatan@gmail.com&product=Pan de queso
+        //En caso de utilizar el @Query: http://localhost:4000/producto-usuario?usuario=jhonatan@gmail.com&product=Pan de queso
         {id: 2, usuario: 'Jhonatan', producto: 'Pan de queso'},
     ]
 
-    constructor (
-        private readonly usersService:UsersService,
-        private readonly productsService:ProductsService
-    ){}
+    // constructor (
+    //     private readonly usersService:UsersService,
+    //     private readonly productsService:ProductsService
+    // ){}
 
 
     productsUsersAll(): IUProductsUsers[]{
         return this.producto_usuario;
     }
 
+    // busqueda individual por id, usuario o producto- TERMINADO
     productsUsersOne(busqueda:string): IUProductsUsers[]{
     
-            const valorNormalizado= String(busqueda).toLowerCase();
+            const valorNormalizado= String((busqueda.trim())).toLowerCase();
     
             const productUserFind= this.producto_usuario.filter((productUser) =>
             
@@ -57,41 +61,47 @@ export class ProductoUsuarioService {
 
 
     
-    create(productUser:Omit<IUProductsUsers, 'id'>): IUProductsUsers{
-        const allUsers = [...this.usersService.findAll(), ...this.users];
-        const allProducts = [...this.productsService.productsAll(), ...this.products];
+    create(dto:searchProductsUsersDTO):  IUProductsUsers {
+         //en el caso de poder enlazar los usuarios del modulo de usuarios = [...this.usersService.findAll(), ...this.users];
+              
+            console.log("DTO recibido en create:", dto, JSON.stringify(dto));
 
-        const user = allUsers.find(
-            u => u.name.toLowerCase() === productUser.usuario.toLowerCase() || 
-                 u.email.toLowerCase() === productUser.usuario.toLowerCase()
-        );
+
+        const busquedaUsuarioNormalizada = dto.usuario.trim().toLowerCase();
+
+
+        const user = this.users.find(
+        // ⭐ Buscamos el valor de entrada (productUserAssociation.usuario)
+        u => u.name.toLowerCase() === busquedaUsuarioNormalizada || 
+             u.email.toLowerCase() === busquedaUsuarioNormalizada
+    );
+
 
         if (!user) {
-            throw new NotFoundException(`Usuario "${productUser.usuario}" no encontrado. Asegúrate de usar el Nombre o Email.`);
+            throw new NotFoundException(`Usuario "${dto.usuario}" no encontrado, ingrese un usuario válido.`);
         }
 
-        // 3. Validar el Producto por nombre
-        const product = allProducts.find(
-            p => p.name.toLowerCase() === productUser.producto.toLowerCase()
+
+        const product = this.products.find(
+            p => p.name.toLowerCase() === dto.producto.toLowerCase()
         );
 
         if (!product) {
             // Se usa NotFoundException porque la entidad producto no se encontró.
-            throw new NotFoundException(`Producto "${productUser.producto}" no encontrado.`);
+            throw new NotFoundException(`Producto "${ dto.producto}" no encontrado.`);
         }
 
         // Normalizar el nombre del usuario para el almacenamiento si se buscó por email
-        const userNameToStore = user.name;
-        const productNameToStore = product.name;
 
-        
         const newId=this.producto_usuario.length >0
             ? this.producto_usuario[this.producto_usuario.length -1].id + 1
             : 1;
             
         const newProductUser: IUProductsUsers={
     
-                id:newId, ...productUser
+                id:newId,
+                usuario: user.name,
+                producto: product.name,
             }
     
             this.producto_usuario.push(newProductUser);
@@ -99,66 +109,66 @@ export class ProductoUsuarioService {
     }
 
 
-    update(busqueda:searchProductsUsersDTO, newProductUser:Omit<IUProductsUsers, 'id'>): IUProductsUsers{
+    // update(busqueda:searchProductsUsersDTO, newProductUser:Omit<IUProductsUsers, 'id'>): IUProductsUsers{
     
         
-        const allUsers=[...this.usersService.findAll(), ...this.users];
-        const allProducts = [...this.productsService.productsAll(), ...this.products];
+    //     const allUsers=[...this.usersService.findAll(), ...this.users];
+    //     const allProducts = [...this.productsService.productsAll(), ...this.products];
 
-        const user = allUsers.find(u=>u.email==busqueda.usuario)
+    //     const user = allUsers.find(u=>u.email==busqueda.usuario)
         
-            if(!user){
+    //         if(!user){
         
-                throw new NotFoundException("Este usuario no existe");
+    //             throw new NotFoundException("Este usuario no existe");
         
-            }
+    //         }
 
-            const product=allProducts.find(p=>p.name==busqueda.product
-            );
+    //         const product=allProducts.find(p=>p.name==busqueda.producto
+    //         );
 
-            if(!product){
+    //         if(!product){
 
-                throw new NotFoundException(`Este producto "${busqueda.product}" no existe`);
-            }
+    //             throw new NotFoundException(`Este producto "${busqueda.producto}" no existe`);
+    //         }
 
-            const productOriginal = allProducts.find(p => p.name == busqueda.product);
-            if (!productOriginal) {
-                throw new NotFoundException(`El producto original "${busqueda.product}" no existe.`);
-            }
+    //         const productOriginal = allProducts.find(p => p.name == busqueda.producto);
+    //         if (!productOriginal) {
+    //             throw new NotFoundException(`El producto original "${busqueda.producto}" no existe.`);
+    //         }
 
-            if (newProductUser.producto) {
-                const productNuevo = allProducts.find(p => p.name == newProductUser.producto);
-            if (!productNuevo) {
-                throw new NotFoundException(`El nuevo producto "${newProductUser.producto}" no existe y no puede ser asignado.`);
-                }
-            }
+    //         if (newProductUser.producto) {
+    //             const productNuevo = allProducts.find(p => p.name == newProductUser.producto);
+    //         if (!productNuevo) {
+    //             throw new NotFoundException(`El nuevo producto "${newProductUser.producto}" no existe y no puede ser asignado.`);
+    //             }
+    //         }
             
 
-            const productUser= this.producto_usuario.find((pro) =>
+    //         const productUser= this.producto_usuario.find((pro) =>
         
-                    pro.usuario.toLowerCase() === user.name.toLowerCase() &&
-                    pro.producto.toLowerCase() === busqueda.product.toLowerCase()
-                );
+    //                 pro.usuario.toLowerCase() === user.name.toLowerCase() &&
+    //                 pro.producto.toLowerCase() === busqueda.producto.toLowerCase()
+    //             );
 
-                if (!productUser) {
-                    throw new NotFoundException(`Producto del usuario no encontrado, intente nuevamente`);
-                }
-                Object.assign(productUser,newProductUser);
-                return productUser;
+    //             if (!productUser) {
+    //                 throw new NotFoundException(`Producto del usuario no encontrado, intente nuevamente`);
+    //             }
+    //             Object.assign(productUser,newProductUser);
+    //             return productUser;
 
-                // return{ usuario_producto: `El usuario ${user.name} con email ${user.email} tiene el producto ${product.name} con precio de ${product.price}`,
+    //             // return{ usuario_producto: `El usuario ${user.name} con email ${user.email} tiene el producto ${product.name} con precio de ${product.price}`,
                     
-                //     user: {id:user.id, name:user.name, email:user.email},
-                //     accesToken: `fake-token-${user.id}-${Date.now()}`}
+    //             //     user: {id:user.id, name:user.name, email:user.email},
+    //             //     accesToken: `fake-token-${user.id}-${Date.now()}`}
                     
             
 
     
         
 
-    }
+    // }
     
-    remove(busqueda:searchProductsUsersDTO) {
+    // remove(busqueda:searchProductsUsersDTO) {
         
 
         
@@ -197,4 +207,4 @@ export class ProductoUsuarioService {
 
     // }
 
-}}
+} // }

@@ -5,7 +5,10 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true}))
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true,
+    forbidNonWhitelisted: true, // lanza error si llega un campo inesperado
+      transform: true, // transforma automáticamente tipos al DTO
+  }))
 
   const port = process.env.PORT || 3000;
   

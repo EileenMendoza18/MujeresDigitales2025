@@ -23,18 +23,20 @@ export class ProductoUsuarioController {
         }
     
     @Post()
-        create(@Body()body:  Omit<IUProductsUsers, 'id'>){
+
+    create(@Body()body: searchProductsUsersDTO){
             return this.productsUsuarioService.create(body);
         }
-    
-    @Put()
-    update(
-        @Query('usuario') usuario: string, 
-        @Query('product') product: string, 
-        @Body() body:   Omit<IUProductsUsers, 'id'>){
-            const busqueda: searchProductsUsersDTO = { usuario, product };
-            return this.productsUsuarioService.update(busqueda,body)
-        }
+
+
+    // @Put()
+    // update(
+    //     @Query('usuario') usuario: string, 
+    //     @Query('producto') product: string, 
+    //     @Body() body:   Omit<IUProductsUsers, 'id'>){
+    //         const busqueda: searchProductsUsersDTO = { usuario, producto };
+    //         return this.productsUsuarioService.update(busqueda,body)
+    //     }
         
     // @Delete()
         
