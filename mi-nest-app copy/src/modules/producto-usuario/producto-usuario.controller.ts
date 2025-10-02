@@ -36,11 +36,11 @@ export class ProductoUsuarioController {
             return this.productsUsuarioService.update(busqueda,body)
         }
         
-    @Delete()
+    // @Delete()
         
-        remove(@Query('usuario') usuario: string, @Query('product') product: string){
-            const busqueda: searchProductsUsersDTO = { usuario, product };
-            return this.productsUsuarioService.remove(busqueda);
-        }
+    //     remove(@Query('usuario') usuario: string, @Query('product') product: string){
+    //         const busqueda: searchProductsUsersDTO = { usuario, product };
+    //         return this.productsUsuarioService.remove(busqueda);
+    //     }
 
 }
