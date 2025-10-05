@@ -31,7 +31,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     UsersModule, 
     ProductsModule, 
     ProductoUsuarioModule, 
-    ProductsModule, AuthModule],
+    ProductsModule, 
+    AuthModule],
   controllers: [
     AppController,
     ProductsController, 
