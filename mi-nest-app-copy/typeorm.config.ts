@@ -1,9 +1,8 @@
 import * as dotenv from 'dotenv'
-import { User } from './src/entities/user.enity'
 import { DataSource } from 'typeorm'
+import { User } from './src/entities/user.entity'
 
 dotenv.config()
-
 export default new DataSource({
 
     type:'mysql',
@@ -15,3 +14,5 @@ export default new DataSource({
     entities:[User],
     migrations:['./src/migrations/*.ts']
 });
+
+
