@@ -12,25 +12,25 @@ export class UsersController {
         return this.usersService.findAll();
     }
 
-    @Get(`:id`)
-    findOne(@Param(`id`) id:String){
+    // @Get(`:id`)
+    // findOne(@Param(`id`) id:String){
 
-        return this.usersService.findOne(Number(id));
-    }
+    //     return this.usersService.findOne(Number(id));
+    // }
 
-    @Post()
-    create(@Body() body : CreateUserDTO){
-        return this.usersService.create(body);
-    }
+    // @Post()
+    // create(@Body() body : CreateUserDTO){
+    //     return this.usersService.create(body);
+    // }
 
-    @Put(':id')
-    update(@Param('id') id:string, @Body() body: UpdateUserDTO){
-        return this.usersService.update(Number(id),body)
-    }
+    // @Put(':id')
+    // update(@Param('id') id:string, @Body() body: UpdateUserDTO){
+    //     return this.usersService.update(Number(id),body)
+    // }
 
-    @Delete(':id')
+    // @Delete(':id')
 
-    remove(@Param('id') id:string){
-        return this.usersService.remove(Number(id));
-    }
+    // remove(@Param('id') id:string){
+    //     return this.usersService.remove(Number(id));
+    // }
 }
