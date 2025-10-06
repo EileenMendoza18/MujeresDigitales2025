@@ -9,7 +9,8 @@ export class SeedUsers1759757005744 implements MigrationInterface {
             INSERT INTO user(name, email, password, age)
             VALUES('Ana López', 'ana@example.com', '12345', 25),
             ('Luis Gómez', 'luis@example.com', '12345', 30)
-
+        
+            
         `)
 
     }
