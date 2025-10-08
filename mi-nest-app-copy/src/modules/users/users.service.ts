@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { throwError } from 'rxjs';
+import { CreateUserDTO } from 'src/dto/create-user.dto';
+import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { User } from 'src/entities/user.entity';
 import { IUser,IProducts } from 'src/interfaces';
 import { Repository } from 'typeorm';
@@ -8,57 +11,36 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class UsersService {
 
-    // private users: IUser []=[
-    //     {id: 1, name: 'Eileen', email: 'eileenjml4816@gmail.com', password: 'eileen123', age: 18},
-    //     {id: 2,name: 'Jefferson', email: 'pullido@gmail.com',  password: 'asd123' },
-    // ]
-
-
     constructor(
 
         @InjectRepository(User)
         private usersRepo:Repository<User>
 
     ){}
-
-
     findAll(){
         return this.usersRepo.find();
     }   
+    async findOne(id:number){
 
-    // findOne(id:number):IUser{
+        const userFind=await this.usersRepo.findOne({where: {id}})
+        if (!userFind) throw new NotFoundException(`Este usuario no ha sido encontrado, intentelo nuevamente`)
+        return userFind
+    
+    }
+    create(newUser: CreateUserDTO){
+        const userCreated = this.usersRepo.create(newUser);
+        return this.usersRepo.save(userCreated);
+    }
+    async update(id:number, updateUser: UpdateUserDTO){
 
-    //     const userFind = this.users.find((users) => users.id === id )
-    //     if (!userFind) throw new NotFoundException(`Este usuario no ha sido encontrado, intentelo nuevamente`)
-    //     return userFind
-    // }
+        await this.usersRepo.update(id, updateUser)
+        return this.findOne(id);
+    }
+    async remove(id: number) {
 
-    // create(user:Omit<IUser, 'id'>): IUser{
+        const result = await this.usersRepo.delete(id);
+        if (result.affected===0)  throw new NotFoundException(`Usuario con ${id} no encontrado`)
+        return{delete:`El usuario con id ${id} fue eliminado correctamente`}
+    }
 
-    //     const newId=this.users.length >0
-    //         ? this.users[this.users.length -1].id + 1
-    //         : 1;
-        
-    //     const newUser: IUser={
-
-    //         id:newId, ...user
-    //     }
-
-    //     this.users.push(newUser);
-    //     return newUser;
-    // }
-
-    // update(id:number, newUser:Omit<IUser, 'id'>): IUser{
-
-    //     const user=this.findOne(id);
-    //     Object.assign(user,newUser);
-    //     return user;
-    // }
-
-    // remove(id: number) {
-
-    //     const user=this.users.findIndex((user)=>user.id===id);
-    //     this.users.splice(user,1)
-    //     return{delete:true}
-    // }
 }
