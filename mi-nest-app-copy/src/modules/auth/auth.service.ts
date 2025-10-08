@@ -1,34 +1,44 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { LoginDTO } from 'src/dto/login.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AuthService {
 
-    constructor (private readonly usersService:UsersService){}
+    constructor (
+        @InjectRepository(User)
+        private userRepo: Repository<User>
+    ) {}
 
-    // login(data:LoginDTO){
+    async login(data:LoginDTO){
 
-    //     const users=this.usersService.findAll();
-    //     const user = users.find(user=>
-    //         user.email==data.email &&
-    //         user.password==data.password
-    //     )
+        const user = await this.userRepo.findOne({where: {email:data.email}})
 
-    //     if(!user){
+        if(!user){
 
-    //         throw new UnauthorizedException("Las credenciales son invalidas");
+            throw new UnauthorizedException("Las credenciales son invalidas");
 
-    //     }
+        }
 
-    //     return {
+        const isPaddwordValid= data.password === user.password
 
-    //         user: {id:user.id, name:user.name, email:user.email},
-    //         accesToken: `fake-token-${user.id}-${Date.now()}`
+        if (!isPaddwordValid){
 
-    //     }
+            throw new UnauthorizedException ("Las credenciales son invalidas");
 
-    // }
+        }
+
+        return {
+
+            user: {id:user.id, name:user.name, email:user.email, age: user.age},
+            accesToken: `fake-token-${user.id}-${Date.now()}`
+
+        }
+
+    }
 
     
 

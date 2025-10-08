@@ -32,7 +32,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     ProductsModule, 
     ProductoUsuarioModule, 
     ProductsModule, 
-    // AuthModule
+    AuthModule
   ],
   controllers: [
     AppController,
