@@ -6,32 +6,32 @@ import { UpdateProductDTO } from 'src/dto/update-products.dto';
 @Controller('products')
 export class ProductsController {
 
-    constructor(private readonly ProductsService: ProductsService){}  
+    constructor(private readonly productsService: ProductsService){}  
     
     @Get()
     productAll(){
-        return this.ProductsService.productsAll();
+        return this.productsService.productsAll();
     }
 
     @Get(':busqueda')
 
-    productOne(@Param('busqueda') busqueda: string ){
-        return this.ProductsService.productsOne(busqueda);
+    productOne(@Param('busqueda') busqueda: string){
+        return this.productsService.productOne(busqueda);
     }
 
     @Post()
     create(@Body()body: CreateProductDTO){
-        return this.ProductsService.create(body);
+        return this.productsService.create(body);
     }
 
     @Put(':busqueda')
     update(@Param('busqueda') busqueda:string, @Body() body: UpdateProductDTO){
-        return this.ProductsService.update(busqueda,body)
+        return this.productsService.update(busqueda,body)
     }
     
     @Delete(':busqueda')
     
     remove(@Param('busqueda') busqueda:string){
-        return this.ProductsService.remove(busqueda);
+        return this.productsService.softDelete(busqueda);
     }
 }
