@@ -1,5 +1,12 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
+// Esta migracion se encarga de insertar datos iniciales (semillas)
+// en la tabla product
+
+// Su proposito es llenar la base de datos con productos de ejemplo,
+// facilitando las pruebas del modulo de productos sin necesidad de
+// crear los registros manualmente desde el sistema.
+
 export class SeedProducts1759961292896 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {

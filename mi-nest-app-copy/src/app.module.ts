@@ -10,8 +10,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 
 @Module({
+  // IMPORTS: Configuración global y módulos de funcionalidad
   imports: [
+    // 1. Configuración de Variables de Entorno
+    // Carga las variables de entorno y las hace accesibles globalmente.
     ConfigModule.forRoot({isGlobal:true}),
+    // 2. Configuración de la Conexión a la Base de Datos (TypeORM)
+    // Configura la conexión a MySQL de manera asíncrona, usando ConfigService para
+    // obtener los parámetros (host, port, credentials, database) de las variables de entorno.
     TypeOrmModule.forRootAsync({
       imports:[ConfigModule],
       inject:[ConfigService],
@@ -22,18 +28,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: false,
+        autoLoadEntities: true,// Carga automáticamente las entidades
+        synchronize: false, // Importante: 'false' en producción. Controla el esquema de la DB mediante migraciones.
+
       }),
     }),
+    // 3. Módulos de la Aplicación
+    // Integración de los módulos de funcionalidad creados para la aplicación.
     UsersModule, 
     ProductsModule, 
     ProductoUsuarioModule, 
     AuthModule
   ],
-  controllers: [
-    AppController],
-  providers: [
-    AppService],
+    controllers: [
+      AppController],
+    providers: [
+      AppService],
 })
 export class AppModule {}
