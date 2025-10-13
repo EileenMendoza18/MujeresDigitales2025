@@ -17,9 +17,20 @@ export class UsersService {
         private usersRepo:Repository<User>
 
     ){}
+    /**
+     * findOne: Method to find Multipler register to user repository
+     * @returns IUser[]- Multipler register
+     */
     findAll(){
         return this.usersRepo.find();
-    }   
+    }  
+    
+    /**
+     * findOne: Method to find unique register to user repository
+     * @param id - {string} - Id for recognize user
+     * @returns IUser- Unique register
+     */
+    
     async findOne(id:number){
 
         const userFind=await this.usersRepo.findOne({where: {id}})
