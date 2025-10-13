@@ -1,9 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { LoginDTO } from 'src/dto/login.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import { CreateUserDTO } from 'src/dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
+import { runInThisContext } from 'vm';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +14,13 @@ export class AuthService {
         @InjectRepository(User)
         private userRepo: Repository<User>
     ) {}
+
+    async register(data:CreateUserDTO ){
+        const hashedPassword= await bcrypt.hash(data.password,10);
+        const userCreated = this.userRepo.create({...data, password: hashedPassword});
+        await this.userRepo.save(userCreated);
+        return {message: 'Usuario registrado con exito', user: {id:userCreated.id, email: userCreated.email}}
+    }
 
     async login(data:LoginDTO){
 
@@ -23,7 +32,7 @@ export class AuthService {
 
         }
 
-        const isPaddwordValid= data.password === user.password
+        const isPaddwordValid= await bcrypt.compare(data.password, user.password)
 
         if (!isPaddwordValid){
 
