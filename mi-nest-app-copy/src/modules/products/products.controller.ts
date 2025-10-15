@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDTO } from 'src/dto/create-products.dto';
 import { UpdateProductDTO } from 'src/dto/update-products.dto';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 // Controlador que maneja todas las peticiones HTTP dirigidas a la ruta '/products'.
 //  Actúa como la capa de presentación, recibiendo las peticiones del cliente,
@@ -37,6 +38,7 @@ export class ProductsController {
     // Utiliza @Body() y CreateProductDTO para validar los datos de entrada
     // antes de pasarlos al servicio.
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     create(@Body()body: CreateProductDTO){
         return this.productsService.create(body);
@@ -46,6 +48,7 @@ export class ProductsController {
     // Objetivo: Actualizar completamente un producto por su ID.
     // Utiliza @Param() para obtener el ID del producto a actualizar
     // y @Body() con UpdateProductDTO para obtener los nuevos datos.
+    @UseGuards(JwtAuthGuard)
     @Put(':busqueda')
     update(@Param('busqueda') busqueda:string, @Body() body: UpdateProductDTO){
         return this.productsService.update(busqueda,body)
@@ -54,7 +57,7 @@ export class ProductsController {
     // MÉTODO: DELETE /products/:id
     // Objetivo: Realizar una eliminación lógica (Soft Delete).
     // En lugar de borrar el registro de la DB, el servicio cambia el campo 'active' a 'false'.
-    
+    @UseGuards(JwtAuthGuard)
     @Delete(':busqueda')
     
     remove(@Param('busqueda') busqueda:string){
