@@ -6,13 +6,15 @@ import { Repository } from 'typeorm';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { runInThisContext } from 'vm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
     constructor (
         @InjectRepository(User)
-        private userRepo: Repository<User>
+        private userRepo: Repository<User>,
+        private jwtService: JwtService,
     ) {}
 
     async register(data:CreateUserDTO ){
@@ -40,10 +42,12 @@ export class AuthService {
 
         }
 
+        const payloadToken = {sub:user.id, name:user.name, email:user.email};
+        const token = await this.jwtService.signAsync(payloadToken)
+        
         return {
 
-            user: {id:user.id, name:user.name, email:user.email, age: user.age},
-            accesToken: `fake-token-${user.id}-${Date.now()}`
+            accesToken: token
 
         }
 
