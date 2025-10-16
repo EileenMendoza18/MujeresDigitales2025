@@ -9,6 +9,7 @@ async function bootstrap() {
     whitelist: true,
     forbidNonWhitelisted: true, // lanza error si llega un campo inesperado
     transform: true, // transforma automáticamente tipos al DTO
+    transformOptions: {enableImplicitConversion: true}
   }))
 
   const port = process.env.PORT || 3000;

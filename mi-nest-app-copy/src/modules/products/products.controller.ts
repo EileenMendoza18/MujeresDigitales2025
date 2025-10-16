@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDTO } from 'src/dto/create-products.dto';
 import { UpdateProductDTO } from 'src/dto/update-products.dto';
@@ -59,11 +59,11 @@ export class ProductsController {
     // Objetivo: Realizar una eliminación lógica (Soft Delete).
     // En lugar de borrar el registro de la DB, el servicio cambia el campo 'active' a 'false'.
     @UseGuards(JwtAuthGuard)
-    @Delete(':busqueda')
+    @Delete(':id')
     
-    remove(@Param('busqueda') busqueda:string){
+    remove(@Param('id', ParseIntPipe) id:number){
             // Nota: Se utiliza el nombre 'softDelete' en el servicio para claridad
 
-        return this.productsService.softDelete(busqueda);
+        return this.productsService.softDelete(id);
     }
 }

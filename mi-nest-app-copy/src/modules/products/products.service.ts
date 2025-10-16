@@ -119,7 +119,7 @@ export class ProductsService {
     // Objetivo: Realizar una eliminación lógica (soft delete) cambiando el campo 'active' a 'false'.
     // No elimina el registro físicamente de la base de datos.
     
-    async softDelete(id: string) {
+    async softDelete(id: number) {
 
         // 1. Actualiza el campo 'active'
         const result = await this.productRepo.update(id, {
