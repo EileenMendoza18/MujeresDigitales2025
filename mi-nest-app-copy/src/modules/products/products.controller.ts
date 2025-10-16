@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDTO } from 'src/dto/create-products.dto';
 import { UpdateProductDTO } from 'src/dto/update-products.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
+import { ParseUpperTrimPipe } from 'src/common/pipes/parse-uppertrim.pipe';
 
 // Controlador que maneja todas las peticiones HTTP dirigidas a la ruta '/products'.
 //  Actúa como la capa de presentación, recibiendo las peticiones del cliente,
@@ -29,7 +30,7 @@ export class ProductsController {
 
     @Get(':busqueda')
 
-    productOne(@Param('busqueda') busqueda: string){
+    productOne(@Param('busqueda', ParseUpperTrimPipe) busqueda: string){
         return this.productsService.productOne(busqueda);
     }
 

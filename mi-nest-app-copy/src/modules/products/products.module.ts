@@ -3,6 +3,7 @@ import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Product } from 'src/entities/product.entity';
+import { ParseUpperTrimPipe } from 'src/common/pipes/parse-uppertrim.pipe';
 
 // Módulo de NestJS que encapsula todas las funcionalidades relacionadas con la gestión de productos.
 // Este módulo configura la inyección de dependencias y la conexión de TypeORM para la entidad 'Product'.
@@ -18,7 +19,7 @@ import { Product } from 'src/entities/product.entity';
   controllers: [ProductsController],
   // PROVIDERS: Servicios y lógica de negocio
   // Componentes que realizan la lógica de negocio y se pueden inyectar en otros (controladores, otros servicios).
-  providers: [ProductsService],
+  providers: [ProductsService, ParseUpperTrimPipe],
   // EXPORTS: Componentes accesibles desde otros módulos
   // Exporta ProductsService para que otros módulos (como el ApppModule o un módulo de Órdenes)
   // puedan inyectar y utilizar los métodos de lógica de negocio de Product.

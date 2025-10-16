@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ParseUpperTrimPipe } from 'src/common/pipes/parse-uppertrim.pipe';
 import { CreateProductDTO } from 'src/dto/create-products.dto';
 import { UpdateProductDTO } from 'src/dto/update-products.dto';
 import { Product } from 'src/entities/product.entity';
@@ -20,13 +21,17 @@ export class ProductsService {
     // Inyección del repositorio de TypeORM para la entidad Product.
      // Permite el acceso directo a la base de datos (DB) para todas las operaciones.
 
+    
     constructor(
     
         @InjectRepository(Product)
-        private productRepo:Repository<Product>
+        private productRepo:Repository<Product>,
     
+        private readonly parseUpperPipe: ParseUpperTrimPipe,
     ){}
 
+
+    
      // METODO: productsAll()
     
     // Devuelve una lista con todos los productos registrados
@@ -43,7 +48,7 @@ export class ProductsService {
     async productOne(busqueda: string) { 
 
         // 1. Preprocesamiento del término de búsqueda
-        const valorNormalizado = String(busqueda).toLowerCase();
+        const valorNormalizado = await this.parseUpperPipe.transform(busqueda);
         const busquedaNumerica = Number(valorNormalizado);
 
         // 2. Definición de las condiciones OR
@@ -57,9 +62,9 @@ export class ProductsService {
             { marca: ILike(`%${valorNormalizado}%`) }
         ];
         // 3. Filtro por estado activo/inactivo (búsqueda de cadenas 'activo'/'inactivo')
-        if (valorNormalizado === 'activo') {
+        if (valorNormalizado === 'ACTIVO') {
             orConditions.push({ active: true });
-        } else if (valorNormalizado === 'inactivo') {
+        } else if (valorNormalizado === 'INACTIVO') {
             orConditions.push({ active: false });
     }
 
