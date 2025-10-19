@@ -3,7 +3,7 @@ import {ConfigModule, ConfigService} from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
-import { ProductoUsuarioModule } from './modules/producto-usuario/producto-usuario.module';
+// import { ProductoUsuarioModule } from './modules/producto-usuario/producto-usuario.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -37,7 +37,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     // Integración de los módulos de funcionalidad creados para la aplicación.
     UsersModule, 
     ProductsModule, 
-    ProductoUsuarioModule, 
+    // ProductoUsuarioModule, 
     AuthModule
   ],
     controllers: [

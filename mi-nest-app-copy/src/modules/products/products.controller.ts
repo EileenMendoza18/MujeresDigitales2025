@@ -4,6 +4,9 @@ import { CreateProductDTO } from 'src/dto/create-products.dto';
 import { UpdateProductDTO } from 'src/dto/update-products.dto';
 import { JwtAuthGuard } from '../auth/jwt.guard';
 import { ParseUpperTrimPipe } from 'src/common/pipes/parse-uppertrim.pipe';
+import { RolesGuard } from '../auth/roles.guard';
+import { RolesEnum } from 'src/entities/user.entity';
+import { Roles } from '../auth/roles.decorator';
 
 // Controlador que maneja todas las peticiones HTTP dirigidas a la ruta '/products'.
 //  Actúa como la capa de presentación, recibiendo las peticiones del cliente,
@@ -29,7 +32,6 @@ export class ProductsController {
     // donde se aplica la lógica OR (ID, precio, nombre, categoría, etc.).
 
     @Get(':busqueda')
-
     productOne(@Param('busqueda', ParseUpperTrimPipe) busqueda: string){
         return this.productsService.productOne(busqueda);
     }
@@ -39,8 +41,9 @@ export class ProductsController {
     // Utiliza @Body() y CreateProductDTO para validar los datos de entrada
     // antes de pasarlos al servicio.
 
-    @UseGuards(JwtAuthGuard)
     @Post()
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(RolesEnum.ADMIN)
     create(@Body()body: CreateProductDTO){
         return this.productsService.create(body);
     }
@@ -49,8 +52,9 @@ export class ProductsController {
     // Objetivo: Actualizar completamente un producto por su ID.
     // Utiliza @Param() para obtener el ID del producto a actualizar
     // y @Body() con UpdateProductDTO para obtener los nuevos datos.
-    @UseGuards(JwtAuthGuard)
     @Put(':busqueda')
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(RolesEnum.ADMIN)
     update(@Param('busqueda') busqueda:string, @Body() body: UpdateProductDTO){
         return this.productsService.update(busqueda,body)
     }
@@ -58,9 +62,9 @@ export class ProductsController {
     // MÉTODO: DELETE /products/:id
     // Objetivo: Realizar una eliminación lógica (Soft Delete).
     // En lugar de borrar el registro de la DB, el servicio cambia el campo 'active' a 'false'.
-    @UseGuards(JwtAuthGuard)
     @Delete(':id')
-    
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(RolesEnum.ADMIN)
     remove(@Param('id', ParseIntPipe) id:number){
             // Nota: Se utiliza el nombre 'softDelete' en el servicio para claridad
 

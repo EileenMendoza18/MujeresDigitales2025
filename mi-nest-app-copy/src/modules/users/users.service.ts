@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { UpdateUserDTO } from 'src/dto/update-user.dto';
 import { User } from 'src/entities/user.entity';
-import { IUser,IProducts } from 'src/interfaces';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 
 
@@ -43,8 +43,9 @@ export class UsersService {
         return this.usersRepo.save(userCreated);
     }
     async update(id:number, updateUser: UpdateUserDTO){
+        const hashedPassword = await bcrypt.hash(updateUser.password, 10)
 
-        await this.usersRepo.update(id, updateUser)
+        await this.usersRepo.update(id, {...updateUser, password: hashedPassword});
         return this.findOne(id);
     }
     async remove(id: number) {
