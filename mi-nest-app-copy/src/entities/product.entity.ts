@@ -1,5 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+/**
+ * @class Product
+ * * Entidad TypeORM que mapea la tabla 'product' en la base de datos.
+ * Define la estructura de un producto con sus respectivos tipos de columna.
+ */
 @Entity()
 export class Product{
 
@@ -45,9 +50,10 @@ export class Product{
     @Column({nullable:false})
     marca: string;    
 
-    // ESTADO DEL PRODUCTO
+    // ESTADO DEL PRODUCTO (Soft Delete)
     // - Tipo de dato: booleano
     // - Indica si el producto está activo (true) o inactivo (false)
+    // - 'nullable: true' permite guardar el registro sin este valor (aunque se recomienda un valor por defecto)
 
     @Column({ nullable: true })
     active: boolean;

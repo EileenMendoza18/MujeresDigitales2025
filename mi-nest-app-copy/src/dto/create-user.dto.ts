@@ -1,5 +1,10 @@
 import { IsEmail, IsInt, IsNotEmpty, IsOptional, Length, Max, Min} from "class-validator";
 
+/**
+ * @class CreateUserDTO
+ * * Data Transfer Object (DTO) para la creación de un nuevo usuario.
+ * Contiene validaciones para los campos esenciales de registro.
+ */
 export class CreateUserDTO{
 
     // NOMBRE DEL USUARIO

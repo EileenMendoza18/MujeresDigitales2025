@@ -9,16 +9,25 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
 import { JwtStrategy } from './jwt.strategy';
 
+/**
+ * @class AuthModule
+ * * Módulo encargado de la lógica de autenticación (registro, login, JWT).
+ */
 @Module({
   imports: [
-    ConfigModule.forRoot({isGlobal:true}),
-    TypeOrmModule.forFeature([User]),
-    PassportModule.register({defaultStrategy: 'jwt'}),
+    ConfigModule.forRoot({isGlobal:true}),// Configuración global de entorno
+    TypeOrmModule.forFeature([User]),// Registro del repositorio de la entidad User
+    PassportModule.register({defaultStrategy: 'jwt'}),// Configuración de Passport para usar JWT por defecto
+    /**
+     * Configuración asíncrona de JwtModule para obtener secretos y opciones
+     * de las variables de entorno inyectadas por ConfigService.
+     */
     JwtModule.registerAsync({
       imports:[ConfigModule],
       inject:[ConfigService],
       useFactory:(config:ConfigService)=>({
-        secret: config.get<string>('JWT_SECRET_KEY'),
+        secret: config.get<string>('JWT_SECRET_KEY'),// Clave secreta para firmar el token
+        // Opciones de firma, obtiene tiempo de expiración de entorno o usa '1h' por defecto
         signOptions: { expiresIn: config.get<string>('JWT_EXPIRES_IN' as string) || '1h' as any}
 
     //     secret: config.get<string>('JWT_SECRET_KEY'),
@@ -27,7 +36,7 @@ import { JwtStrategy } from './jwt.strategy';
     })
     
   ],
-  providers: [AuthService, UsersService,JwtStrategy ],
-  controllers: [AuthController ]
+  providers: [AuthService, UsersService,JwtStrategy ],// Servicios y estrategias de autenticación
+  controllers: [AuthController ]// Controlador de autenticación
 })
 export class AuthModule {}

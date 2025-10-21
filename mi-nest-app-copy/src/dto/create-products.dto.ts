@@ -1,5 +1,10 @@
 import { IsBoolean,  IsIn, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, Length,  Min,  } from "class-validator";
 
+/**
+ * @class CreateProductDTO
+ * * Data Transfer Object (DTO) para la creación de un nuevo producto.
+ * Utiliza decoradores de 'class-validator' para aplicar reglas de validación.
+ */
 export class CreateProductDTO{
 
   // Nombre del producto

@@ -8,7 +8,11 @@ import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-
+/**
+ * @class AppModule
+ * * Módulo raíz de la aplicación NestJS. Configura la infraestructura global
+ * como variables de entorno, conexión a la DB y módulos de funcionalidad.
+ */
 @Module({
   // IMPORTS: Configuración global y módulos de funcionalidad
   imports: [

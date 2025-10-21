@@ -6,10 +6,11 @@ import { Product } from './src/entities/product.entity';
 // Carga las variables de entorno del archivo .env al entorno de Node.
 dotenv.config()
 
-
-// Exporta una instancia de DataSource con la configuración de la conexión.
-// TypeORM CLI buscará por defecto este export para operar.
- 
+/**
+ * Configuración de la conexión a la base de datos para TypeORM CLI (migraciones).
+ * Exporta una instancia de DataSource con la configuración de la conexión.
+ * TypeORM CLI buscará por defecto este export para operar.
+ */
 export default new DataSource({
 
     // Tipo de base de datos utilizado.

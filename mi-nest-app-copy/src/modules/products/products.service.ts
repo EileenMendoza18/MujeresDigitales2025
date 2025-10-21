@@ -13,8 +13,11 @@ import { ILike,  Repository } from 'typeorm';
 //  - Crear nuevos productos.
 //  - Actualizar productos existentes.
 //  - Realizar una eliminacion logica (soft delete).
-// Utiliza TypeORM para comunicarse con la base de datos mediante un repositorio.
-
+/**
+ * @class ProductsService
+ * * Servicio que maneja toda la lógica relacionada con la entidad Product.
+ * Utiliza TypeORM para comunicarse con la base de datos.
+ */
 @Injectable()
 export class ProductsService {
 
@@ -26,28 +29,33 @@ export class ProductsService {
     
         @InjectRepository(Product)
         private productRepo:Repository<Product>,
-    
+        // Inyección del pipe para reutilizar la lógica de normalización de texto
         private readonly parseUpperPipe: ParseUpperTrimPipe,
     ){}
 
-
-    
-     // METODO: productsAll()
-    
-    // Devuelve una lista con todos los productos registrados
-    // en la base de datos, sin filtros ni condiciones.
+    /**      * @method productsAll
+     * Devuelve una lista con todos los productos registrados
+     * en la base de datos, sin filtros ni condiciones.
+     * @returns Promise<Product[]> Lista de productos.
+     */
 
     productsAll(){
         return this.productRepo.find();
     }
 
-    // METODO: productOne(busqueda)
-    // Objetivo: Realizar una búsqueda flexible utilizando múltiples campos (OR logic).
+    /**
+     * @method productOne
+     * Realiza una búsqueda flexible utilizando múltiples campos (OR logic).
+     * @param busqueda Término de búsqueda.
+     * @returns Promise<Product[]> Lista de productos que coinciden.
+     * @throws NotFoundException si no se encuentra ningún producto.
+     */
     // El término de búsqueda puede coincidir con: ID, precio, nombre, categoría, marca o estado 'activo'/'inactivo'.
     
     async productOne(busqueda: string) { 
 
         // 1. Preprocesamiento del término de búsqueda
+        // Normaliza a mayúsculas y recorta espacios
         const valorNormalizado = await this.parseUpperPipe.transform(busqueda);
         const busquedaNumerica = Number(valorNormalizado);
 
@@ -94,9 +102,12 @@ export class ProductsService {
         return productFind;
     }
 
-    // MÉTODO: create(newProduct)
-     // Objetivo: Crear y persistir un nuevo producto.
-    // Utiliza el DTO para asegurar la validación de los datos de entrada.
+    /**
+     * @method create
+     * Crea y persiste un nuevo producto en la base de datos.
+     * @param newProduct DTO con los datos del nuevo producto.
+     * @returns Promise<Product> El producto guardado.
+     */
     create(newProduct: CreateProductDTO){
         // 1. Crea una instancia de la entidad Product (no guardada aún)
        const productCreated = this.productRepo.create(newProduct);
@@ -106,8 +117,13 @@ export class ProductsService {
     }
 
 
-    // MÉTODO: update(busqueda, updateProduct)
-    // Objetivo: Actualizar los campos de un producto específico.
+    /**
+     * @method update
+     * Actualiza los campos de un producto específico.
+     * @param busqueda ID del producto a actualizar.
+     * @param updateProduct DTO con los datos a actualizar.
+     * @returns Promise<Product[]> El producto actualizado (buscado por productOne).
+     */
     async update(busqueda:string, updateProduct: UpdateProductDTO){
             // 1. Ejecuta la actualización en la DB usando el ID (busqueda) y el DTO
             await this.productRepo.update(busqueda, updateProduct)
@@ -115,8 +131,13 @@ export class ProductsService {
             return this.productOne(busqueda);
         }
     
-    // MÉTODO: softDelete(id)
-    // Objetivo: Realizar una eliminación lógica (soft delete) cambiando el campo 'active' a 'false'.
+    /**
+     * @method softDelete
+     * Realiza una eliminación lógica (soft delete) cambiando el campo 'active' a 'false'.
+     * @param id ID del producto a desactivar.
+     * @returns Mensaje de confirmación.
+     * @throws NotFoundException si el producto no existe.
+     */
     // No elimina el registro físicamente de la base de datos.
     
     async softDelete(id: number) {
