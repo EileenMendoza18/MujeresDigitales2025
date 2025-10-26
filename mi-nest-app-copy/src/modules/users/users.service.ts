@@ -63,10 +63,18 @@ export class UsersService {
      * @returns Promise<User> El usuario actualizado.
      */
     async update(id:number, updateUser: UpdateUserDTO){
-        // Hashea la nueva contraseña
-        const hashedPassword = await bcrypt.hash(updateUser.password, 10)
+        
+        const dataToUpdate = {...updateUser}
+        let dataWithPassword;
+        
+        if (updateUser.password){
+            // Hashea la nueva contraseña
+            const hashedPassword = await bcrypt.hash(updateUser.password, 10)
+            dataWithPassword = {...dataToUpdate, password: hashedPassword}
+        }
+
         // Actualiza el registro con los datos y la nueva contraseña hasheada
-        await this.usersRepo.update(id, {...updateUser, password: hashedPassword});
+        await this.usersRepo.update(id, updateUser.password ? dataWithPassword: dataToUpdate);
         // Devuelve el usuario actualizado
         return this.findOne(id);
     }
