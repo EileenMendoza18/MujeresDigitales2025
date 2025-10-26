@@ -52,7 +52,7 @@ export class ProductsService {
      */
     // El término de búsqueda puede coincidir con: ID, precio, nombre, categoría, marca o estado 'activo'/'inactivo'.
     
-    async productOne(busqueda: string) { 
+    async productOne(busqueda: string| number) { 
 
         // 1. Preprocesamiento del término de búsqueda
         // Normaliza a mayúsculas y recorta espacios
@@ -124,7 +124,7 @@ export class ProductsService {
      * @param updateProduct DTO con los datos a actualizar.
      * @returns Promise<Product[]> El producto actualizado (buscado por productOne).
      */
-    async update(busqueda:string, updateProduct: UpdateProductDTO){
+    async update(busqueda:string | number, updateProduct: UpdateProductDTO){
             // 1. Ejecuta la actualización en la DB usando el ID (busqueda) y el DTO
             await this.productRepo.update(busqueda, updateProduct)
             // 2. Devuelve el producto actualizado utilizando el método de búsqueda
