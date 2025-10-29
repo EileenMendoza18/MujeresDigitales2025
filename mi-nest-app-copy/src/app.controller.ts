@@ -4,7 +4,7 @@ import { AppService } from './app.service';
  * @class AppController
  * * Controlador principal que maneja las rutas a nivel raíz de la aplicación.
  */
-@Controller()
+@Controller('/api')
 export class AppController {
   // Inyección de dependencia del servicio de aplicación
   constructor(private readonly appService: AppService) {}

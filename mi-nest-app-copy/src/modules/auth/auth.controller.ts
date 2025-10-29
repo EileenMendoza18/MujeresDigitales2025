@@ -3,13 +3,15 @@ import { LoginDTO } from 'src/dto/login.dto';
 import { AuthService } from './auth.service';
 import { CreateUserDTO } from 'src/dto/create-user.dto';
 import { JwtAuthGuard } from './jwt.guard';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /**
  * @class AuthController
  * * Controlador que maneja las rutas relacionadas con la autenticación de usuarios.
  * Ruta base: `/auth`
  */
-@Controller('auth')
+@ApiTags('Auth')
+@Controller('/api/auth')
 export class AuthController {
 
     // Inyección de dependencia del servicio de autenticación
@@ -21,6 +23,8 @@ export class AuthController {
      * @returns Resultado del registro.
      */
     @Post('register')
+    @ApiOperation({ summary: 'Registra un usuario' })
+    @ApiResponse({ status: 200, description: 'Usuario registrado con exito en BD y nos devuelve el usuario' })
     register(@Body() data: CreateUserDTO){
         return this.authService.register(data);
     }
@@ -32,6 +36,9 @@ export class AuthController {
      * @returns Objeto con el token de acceso (`accesToken`).
      */
     @Post('login')
+    @ApiOperation({ summary: 'Inicia la sesion de un usuario' })
+    @ApiResponse({ status: 200, description: 'Usuario logueado con exito y devuelve el JWT Token' })
+    @ApiResponse({ status: 401, description: 'Credenciales invalidas' })
     async login(@Body() data: LoginDTO){
         return this.authService.login(data);
     }
@@ -44,6 +51,8 @@ export class AuthController {
      */
     @UseGuards(JwtAuthGuard)
     @Get('profile')
+    @ApiOperation({ summary: 'Devuelve la informacion del usuario' })
+    @ApiResponse({ status: 200, description: 'Informacion del usuario' })
     getProfile(@Request() req){
         return req.user;
     }

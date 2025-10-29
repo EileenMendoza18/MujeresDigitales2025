@@ -1,6 +1,7 @@
 import { IsEmail, IsInt, IsNotEmpty, IsOptional, Length, Max, Min } from "class-validator";
 import { CreateUserDTO } from "./create-user.dto";
 import * as userEntity from "src/entities/user.entity";
+import { ApiProperty } from "@nestjs/swagger";
 
 /**
  * @class UpdateUserDTO
@@ -14,21 +15,25 @@ export class UpdateUserDTO {
     // ROL DEL USUARIO
     // - Campo obligatorio
     // - Debe ser un valor válido del enum `userEntity.Roles` (admin | user)
+    @ApiProperty({ example: 'admin', description: 'Rol del usuario', required: false })
     @IsNotEmpty()
     role: userEntity.Roles;
 
+    @ApiProperty({ example: 'Jefferson Pulido', description: 'Nombre completo del usuario', required: false })
     @IsOptional()
     name?:string; 
         
-    
+    @ApiProperty({ example: 'jp@gmail.com', description: 'Email valido del usuario', required: false })
     @IsOptional()
     @IsEmail()
     email?:string; 
     
+    @ApiProperty({ example: '123456', description: 'Contraseña minima de 6 caracteres y maximo 15', required: false })
     @IsOptional()
     @Length(6,15, {message: 'La contraseña debe tener un minimo de 6 y maximo de 15 caracteres'})
     password?: string;
     
+    @ApiProperty({ example: '23', description: 'Edad del usuario', required: false })
     @IsOptional()
     @IsInt({message: 'La edad debe ser un valor numerico'})
     @Min(18,{message: 'La edad minimo permitida es de 18 años'})

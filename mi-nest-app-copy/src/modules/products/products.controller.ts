@@ -7,6 +7,7 @@ import { ParseUpperTrimPipe } from 'src/common/pipes/parse-uppertrim.pipe';
 import { RolesGuard } from '../auth/roles.guard';
 import { RolesEnum } from 'src/entities/user.entity';
 import { Roles } from '../auth/roles.decorator';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 /**
  * @class ProductsController
@@ -14,7 +15,8 @@ import { Roles } from '../auth/roles.decorator';
  * Actúa como la capa de presentación, recibiendo las peticiones del cliente,
  * validando el cuerpo (DTOs) y delegando la lógica de negocio al ProductsService.
  */
-@Controller('products')
+@ApiTags('Products')
+@Controller('/api/products')
 export class ProductsController {
 
     // INYECCIÓN DE DEPENDENCIAS: ProductsService
@@ -27,6 +29,8 @@ export class ProductsController {
      * @returns Lista de todos los productos.
      */
     @Get()
+    @ApiOperation({ summary: 'Obtener todos los productos' })
+    @ApiResponse({ status: 200, description: 'Lista de productos retornados desde BD' })
     productAll(){
         return this.productsService.productsAll();
     }
@@ -38,6 +42,10 @@ export class ProductsController {
      * @returns Lista de productos que coinciden con el término de búsqueda.
      */
     @Get(':busqueda')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Obtener el producto por filtro' })
+    @ApiResponse({ status: 200, description: 'Producto retornado desde BD' })
+    @ApiResponse({ status: 404, description: 'Producto NO encontrado desde BD' })
     // Aplica ParseUpperTrimPipe al parámetro 'busqueda'
     productOne(@Param('busqueda', ParseUpperTrimPipe) busqueda: string){
         return this.productsService.productOne(busqueda);
@@ -51,6 +59,9 @@ export class ProductsController {
      * @returns El producto creado.
      */
     @Post()
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Crear un producto' })
+    @ApiResponse({ status: 201, description: 'Producto creado exitosamente en BD' })
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(RolesEnum.ADMIN)
     create(@Body()body: CreateProductDTO){
@@ -66,6 +77,9 @@ export class ProductsController {
      * @returns El producto actualizado.
      */
     @Put(':busqueda')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Actualiza un producto' })
+    @ApiResponse({ status: 200, description: 'Producto actualizado exitosamente en BD' })
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(RolesEnum.ADMIN)
     update(@Param('busqueda') busqueda:string, @Body() body: UpdateProductDTO){
@@ -80,6 +94,10 @@ export class ProductsController {
      * @returns Mensaje de confirmación.
      */
     @Delete(':id')
+    @ApiBearerAuth()
+    @ApiOperation({ summary: 'Inactiva un producto' })
+    @ApiResponse({ status: 200, description: 'Producto inactivado exitosamente en BD' })
+    @ApiResponse({ status: 404, description: 'Producto NO encontrado desde BD' })
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Roles(RolesEnum.ADMIN)
     // ParseIntPipe asegura que el 'id' sea un número entero

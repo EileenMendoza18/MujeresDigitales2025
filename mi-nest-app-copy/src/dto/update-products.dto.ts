@@ -1,5 +1,6 @@
 import { IsBoolean, IsIn, IsNumber, IsOptional, IsPositive, IsString, Length, Min } from "class-validator";
 import { CreateProductDTO } from "./create-products.dto";
+import { ApiProperty } from "@nestjs/swagger";
 
 
 // En caso de necesitar validaciones especificas para la actualizacion,
@@ -18,7 +19,7 @@ export class UpdateProductDTO{
   //   Obligatorio
   //   Debe ser un texto
    
-
+    @ApiProperty({ example: 'Botas', description: 'Nombre del producto', required: false })
     @IsOptional({ message: 'El nombre es obligatorio'})
     @IsString({ message: 'El nombre debe ser un texto' })
     name?:string; 
@@ -28,7 +29,7 @@ export class UpdateProductDTO{
     //  - Obligatoria
     //  - Debe ser texto
     //  - Longitud entre 20 y 100 caracteres
-  
+    @ApiProperty({ example: 'Botas negras de seguridad', description: 'Descripcion del producto', required: false })
     @IsOptional({ message: 'La descripcion es obligatoria'})
     @IsString({ message: 'La descripcion debe ser un texto' })
     @Length(20, 100, { message: 'La descripcion debe tener entre 20 y 100 caracteres' })
@@ -40,7 +41,7 @@ export class UpdateProductDTO{
     // - Debe ser positivo y mayor que 0
     // - Precio minimo permitido: 500 pesos
 
-    
+    @ApiProperty({ example: '30000', description: 'Precio del producto', required: false  })
     @IsOptional({ message: 'Debe ingresar un precio obligatorio' })
     @IsNumber({maxDecimalPlaces: 2}, {message: 'El precio debe ser un número con máximo dos decimales'})
     @IsPositive({message: 'El precio debe ser un número positivo mayor que 0'})
@@ -53,11 +54,11 @@ export class UpdateProductDTO{
     // - Longitud entre 3 y 30 caracteres
     // - Debe pertenecer a una de las categorias permitidas:
     //   'Panaderia', 'Pasteleria', 'Alimentos', 'Hogar', 'Otros'
-
+    @ApiProperty({ example: 'Otros', description: 'Categoria del producto', required: false })
     @IsString({ message: 'La categoría debe ser un texto' })
     @IsOptional({ message: 'La categoría es obligatoria'})
     @Length(3, 30, { message: 'La categoría debe tener entre 3 y 30 caracteres' })
-    @IsIn(['Panaderia', 'Pasteleria', 'Alimentos', 'Hogar', 'Otros'], { 
+    @IsIn(['Panaderia', 'Pasteleria', 'Alimentos', 'Hogar', 'Otros'], {
     message: 'La categoría debe ser una de las siguientes: Panaderia, Pasteleria, Alimentos, Hogar, Otros' })
     category?: string;
 
@@ -65,7 +66,7 @@ export class UpdateProductDTO{
     // - Campo obligatorio
     // - Debe ser texto
     // - Longitud entre 4 y 30 caracteres
-
+    @ApiProperty({ example: 'Hasbro', description: 'Marca del producto', required: false })
     @IsString({ message: 'La marca debe ser un texto' })
     @IsOptional({ message: 'La marca es obligatoria' })
     @Length(4, 30, { message: 'La marca debe tener entre 4 y 30 caracteres' })
@@ -74,7 +75,7 @@ export class UpdateProductDTO{
     // ESTADO DEL PRODUCTO
     // - Campo obligatorio(true o false)
     // - Debe ser booleano (true = activo, false = inactivo)
-    
+    @ApiProperty({ example: 'true', description: 'Estado del producto (true=activo, false=inactivo)', required: false })
     @IsOptional({ message: 'El estado del producto es obligatorio (active debe ser true o false)' })
     @IsBoolean({message: 'El estado del producto debe ser un valor boleano'})
     active?: boolean;    
